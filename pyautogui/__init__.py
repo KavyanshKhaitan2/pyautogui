@@ -182,7 +182,7 @@ try:
     from pyscreeze import center, pixel, pixelMatchesColor
     
     import pyscreenshot
-    def screenshot(imageFilename: StrOrBytesPath | None = None, region: tuple[int, int, int, int] | None = None) -> PIL.Image:
+    def screenshot(imageFilename: StrOrBytesPath | None = None, region: tuple[int, int, int, int] | None = None) -> PIL.Image.Image:
         x, y, w, h = region
         bbox = (x, y, x+w, y+h)
         im = pyscreenshot.grab(bbox=bbox)
