@@ -14,7 +14,6 @@ from __future__ import absolute_import, division, print_function
 
 
 __version__ = "0.9.54"
-
 import collections
 import sys
 import time
@@ -24,8 +23,8 @@ import platform
 import re
 import functools
 from contextlib import contextmanager
-from _typeshed import StrOrBytesPath
 import PIL
+
 
 class PyAutoGUIException(Exception):
     """
@@ -182,12 +181,17 @@ try:
     from pyscreeze import center, pixel, pixelMatchesColor
     
     import pyscreenshot
-    def screenshot(imageFilename: StrOrBytesPath | None = None, region: tuple[int, int, int, int] | None = None) -> PIL.Image.Image:
-        x, y, w, h = region
-        bbox = (x, y, x+w, y+h)
+    def screenshot(imageFilename: str | bytes | os.PathLike | None = None, region: tuple[int, int, int, int] | None = None) -> PIL.Image.Image:
+        if region is None:
+            bbox = None
+        else:
+            x, y, w, h = region
+            bbox = (x, y, x+w, y+h)
         im = pyscreenshot.grab(bbox=bbox)
-        im.save(imageFilename)
+        if imageFilename:
+            im.save(imageFilename)
         return im
+    pyscreeze.screenshot = screenshot
 
     # Change the locate*() functions so that they raise PyAutoGUI's ImageNotFoundException instead.
     @raisePyAutoGUIImageNotFoundException
@@ -1775,7 +1779,7 @@ def displayMousePosition(xOffset=0, yOffset=0):
                 # Pixel color can only be found for the primary monitor, and also not on mac due to the screenshot having the mouse cursor in the way.
                 pixelColor = ("NaN", "NaN", "NaN")
             else:
-                pixelColor = pyscreeze.screenshot().getpixel(
+                pixelColor = screenshot().getpixel(
                     (x, y)
                 )  # NOTE: On Windows & Linux, getpixel() returns a 3-integer tuple, but on macOS it returns a 4-integer tuple.
             positionStr += " RGB: (" + str(pixelColor[0]).rjust(3)
