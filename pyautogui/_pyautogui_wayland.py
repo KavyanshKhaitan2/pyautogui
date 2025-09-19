@@ -1,7 +1,7 @@
 """
 To Implement:
 [x] _position: Return xy coordinates of mouse
-[ ] _size: Return screen size
+[x] _size: Return screen size
 [ ] _vscroll: Vertical mouse scroll
 [ ] _hscroll: Horizontal mouse scroll
 [ ] _scroll: Mouse scroll
@@ -22,6 +22,7 @@ from pyautogui import LEFT, MIDDLE, RIGHT
 
 import wayland_automation
 import pyscreenshot
+from PIL import Image
 
 def _position():
     """Returns the current xy coordinates of the mouse cursor as a two-integer
@@ -34,3 +35,7 @@ def _position():
     pos = next(gen)
     gen.close()
     return pos
+
+def _size():
+    im:Image.Image = pyscreenshot.grab()
+    return im.size
