@@ -14,7 +14,9 @@ import pyscreenshot
 import pydotool
 from pydotool import ClickEnum
 from PIL import Image
+import time
 
+SCALING = 1
 
 def _position():
     """Returns the current xy coordinates of the mouse cursor as a two-integer
@@ -28,15 +30,23 @@ def _position():
     gen.close()
     return pos
 
-
 def _size():
     im: Image.Image = pyscreenshot.grab()
     return im.size
 
 
 def _moveTo(x, y):
-    subprocess.run(["ydotool", "mousemove", "-a", "-x", x, "-y", y])
+    new_x = int(x/(2*SCALING))
+    new_y = int(y/(2*SCALING))
+    subprocess.run(["ydotool", "mousemove", "-a", "-x", str(new_x), "-y", str(new_y)])
 
+if "Getting Correct Scaling":
+    prev_x, prev_y = _position()
+    w, h = _size()
+    _moveTo(w, h)
+    x, y = _position()
+    _moveTo(prev_x, prev_y)
+    SCALING = w/x
 
 def _vscroll(clicks, x=None, y=None):
     clicks = int(clicks)
@@ -64,6 +74,10 @@ def _scroll(clicks, x=None, y=None):
     return _vscroll(clicks, x, y)
 
 
+def __click(code:int):
+    code = hex(code)
+    subprocess.run(["ydotool", "click", code])
+
 def _click(x, y, button):
     assert button in (
         LEFT,
@@ -73,11 +87,11 @@ def _click(x, y, button):
 
     _moveTo(x, y)
     if button == LEFT:
-        pydotool.left_click()
+        __click(ClickEnum.LEFT | ClickEnum.LEFT_CLICK)
     if button == MIDDLE:
-        pydotool.click(ClickEnum.MIDDLE + ClickEnum.MOUSE_CLICK)
+        __click(ClickEnum.MIDDLE | ClickEnum.MOUSE_CLICK)
     if button == RIGHT:
-        pydotool.right_click()
+        __click(ClickEnum.RIGHT | ClickEnum.LEFT_CLICK)
 
 
 def _mouse_is_swapped():
@@ -94,11 +108,11 @@ def _mouseDown(x, y, button):
 
     _moveTo(x, y)
     if button == LEFT:
-        pydotool.click(ClickEnum.LEFT + ClickEnum.MOUSE_DOWN)
+        __click(ClickEnum.LEFT | ClickEnum.MOUSE_DOWN)
     if button == MIDDLE:
-        pydotool.click(ClickEnum.MIDDLE + ClickEnum.MOUSE_DOWN)
+        __click(ClickEnum.MIDDLE | ClickEnum.MOUSE_DOWN)
     if button == RIGHT:
-        pydotool.click(ClickEnum.RIGHT + ClickEnum.MOUSE_DOWN)
+        __click(ClickEnum.RIGHT | ClickEnum.MOUSE_DOWN)
 
 
 def _mouseUp(x, y, button):
@@ -110,11 +124,11 @@ def _mouseUp(x, y, button):
 
     _moveTo(x, y)
     if button == LEFT:
-        pydotool.click(ClickEnum.LEFT + ClickEnum.MOUSE_UP)
+        __click(ClickEnum.LEFT | ClickEnum.MOUSE_UP)
     if button == MIDDLE:
-        pydotool.click(ClickEnum.MIDDLE + ClickEnum.MOUSE_UP)
+        __click(ClickEnum.MIDDLE | ClickEnum.MOUSE_UP)
     if button == RIGHT:
-        pydotool.click(ClickEnum.RIGHT + ClickEnum.MOUSE_UP)
+        __click(ClickEnum.RIGHT | ClickEnum.MOUSE_UP)
 
 
 """ Information for keyboardMapping derived from PyKeyboard's special_key_assignment() function.
@@ -194,6 +208,32 @@ keyboardMapping.update(
         "x": pydotool.KEY_X,
         "y": pydotool.KEY_Y,
         "z": pydotool.KEY_Z,
+        "A": pydotool.KEY_A,
+        "B": pydotool.KEY_B,
+        "C": pydotool.KEY_C,
+        "D": pydotool.KEY_D,
+        "E": pydotool.KEY_E,
+        "F": pydotool.KEY_F,
+        "G": pydotool.KEY_G,
+        "H": pydotool.KEY_H,
+        "I": pydotool.KEY_I,
+        "J": pydotool.KEY_J,
+        "K": pydotool.KEY_K,
+        "L": pydotool.KEY_L,
+        "M": pydotool.KEY_M,
+        "N": pydotool.KEY_N,
+        "O": pydotool.KEY_O,
+        "P": pydotool.KEY_P,
+        "Q": pydotool.KEY_Q,
+        "R": pydotool.KEY_R,
+        "S": pydotool.KEY_S,
+        "T": pydotool.KEY_T,
+        "U": pydotool.KEY_U,
+        "V": pydotool.KEY_V,
+        "W": pydotool.KEY_W,
+        "X": pydotool.KEY_X,
+        "Y": pydotool.KEY_Y,
+        "Z": pydotool.KEY_Z,
         "{": pydotool.KEY_LEFTBRACE | pydotool.FLAG_UPPERCASE,
         "|": pydotool.KEY_BACKSLASH | pydotool.FLAG_UPPERCASE,
         "}": pydotool.KEY_RIGHTBRACE | pydotool.FLAG_UPPERCASE,
@@ -287,6 +327,14 @@ keyboardMapping.update(
     }
 )
 
+def __sendkey(keys:tuple[int] | list[int], next_delay:int | float | None = None):
+    seq = [] if next_delay is None else [f"--key-delay={next_delay}"]
+    for key in keys:
+        mod = key % 2
+        key = key - mod
+        seq.append(f'{key}:{mod}')
+    subprocess.run(["ydotool", "key", *seq])
+    
 
 def _keyDown(key):
     """Performs a keyboard key press without the release. This will put that
@@ -300,23 +348,23 @@ def _keyDown(key):
       None
     """
     
-    if key.isinstance(int):
-        pydotool.key_seq([(key, pydotool.DOWN)])
+    if type(key) is int:
+        __sendkey([key | pydotool.DOWN])
         return
     
     if key not in keyboardMapping or keyboardMapping[key] is None:
         return
 
-    pydotool.key_seq()
-
     needsShift = pyautogui.isShiftCharacter(key)
     if needsShift:
-        pydotool.key_seq([(pydotool.KEY_LEFTSHIFT, pydotool.DOWN)])
+        __sendkey([pydotool.KEY_LEFTSHIFT | pydotool.DOWN])
     
-    pydotool.key_seq([(keyboardMapping[key], pydotool.UP)])
+    time.sleep(0.1)
+    __sendkey([keyboardMapping[key] | pydotool.DOWN])
+    time.sleep(0.1)
 
     if needsShift:
-        pydotool.key_seq([(pydotool.KEY_LEFTSHIFT, pydotool.UP)])
+        __sendkey([pydotool.KEY_LEFTSHIFT | pydotool.UP])
 
 def _keyUp(key):
     """Performs a keyboard key release (without the press down beforehand).
@@ -331,9 +379,9 @@ def _keyUp(key):
     if key not in keyboardMapping or keyboardMapping[key] is None:
         return
 
-    if key.isinstance(int):
+    if type(key) is int:
         keycode = key
     else:
         keycode = keyboardMapping[key]
 
-    pydotool.key_seq([(keycode, pydotool.UP)])
+    __sendkey([keycode, pydotool.UP])
