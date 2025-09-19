@@ -1,0 +1,32 @@
+version = 1
+revision = 2
+requires-python = ">=3.13"
+
+[[package]]
+name = "evdev"
+version = "1.9.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/63/fe/a17c106a1f4061ce83f04d14bcedcfb2c38c7793ea56bfb906a6fadae8cb/evdev-1.9.2.tar.gz", hash = "sha256:5d3278892ce1f92a74d6bf888cc8525d9f68af85dbe336c95d1c87fb8f423069", size = 33301, upload-time = "2025-05-01T19:53:47.69Z" }
+
+[[package]]
+name = "pyautogui"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "wayland-automation" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "wayland-automation", specifier = ">=0.2.1" }]
+
+[[package]]
+name = "wayland-automation"
+version = "0.2.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "evdev" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/40/91/c14bd731d5890f21f5e998379946dfc4f883bc9a3476f79d03d58f964182/wayland_automation-0.2.1.tar.gz", hash = "sha256:5759373a7410696693dda732b33f0b34a91ef57bc8d2bf173e3949b6fb020b47", size = 14026, upload-time = "2025-08-14T08:23:24.653Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ee/03/242774a3f4be88c96eeec6e51fc16da0235ce984b64853f20bd6097ff2fb/wayland_automation-0.2.1-py3-none-any.whl", hash = "sha256:628ced8c69da86fc5770dcb159964ba4bad14e835bfbf91c0a5e85b078f46bc9", size = 14282, upload-time = "2025-08-14T08:23:23.655Z" },
+]

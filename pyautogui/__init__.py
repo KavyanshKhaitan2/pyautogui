@@ -541,7 +541,16 @@ elif sys.platform == "darwin":
 elif sys.platform == "win32":
     from . import _pyautogui_win as platformModule
 elif platform.system() == "Linux":
-    from . import _pyautogui_x11 as platformModule
+    session_type = os.getenv('XDG_SESSION_TYPE')
+    if session_type == 'wayland':
+        # Assuming session is in Wayland.
+        from . import _pyautogui_wayland as platformModule
+    elif session_type == 'x11':
+        # Assuming session is in X11.
+        from . import _pyautogui_x11 as platformModule
+    else:
+        raise NotImplementedError("Detected platform: Linux\nYour session type (%s) is unknown." % session_type)
+        
 else:
     raise NotImplementedError("Your platform (%s) is not supported by PyAutoGUI." % (platform.system()))
 
