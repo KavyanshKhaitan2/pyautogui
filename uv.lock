@@ -106,6 +106,7 @@ source = { virtual = "." }
 dependencies = [
     { name = "pillow" },
     { name = "pyscreenshot" },
+    { name = "python-ydotool" },
     { name = "wayland-automation" },
 ]
 
@@ -113,6 +114,7 @@ dependencies = [
 requires-dist = [
     { name = "pillow", specifier = ">=11.3.0" },
     { name = "pyscreenshot", specifier = ">=3.1" },
+    { name = "python-ydotool", specifier = ">=1.0.4.post1" },
     { name = "wayland-automation", specifier = ">=0.2.1" },
 ]
 
@@ -130,6 +132,12 @@ sdist = { url = "https://files.pythonhosted.org/packages/f0/bf/a051bea0ad0fb9877
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c6/fb/acc0b5a7251682cd11c67c40a1532ffb1dda71626e9ad7e7ba1e55cc3ae2/pyscreenshot-3.1-py3-none-any.whl", hash = "sha256:73d406d41a0977125bdfd2f6488f0caf1394e84d1d4c1065d5e8b1400b307096", size = 28796, upload-time = "2023-03-12T06:34:22.549Z" },
 ]
+
+[[package]]
+name = "python-ydotool"
+version = "1.0.4.post1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/78/49/929d9c409ce378a87928a9b1ae62a2273f33588a5b233274a03e629b9ab1/python_ydotool-1.0.4.post1.tar.gz", hash = "sha256:69815d603624fbc81f0a49eec9ae891368ce62031433596161250201de2d9e49", size = 39844, upload-time = "2024-05-26T17:34:54.249Z" }
 
 [[package]]
 name = "wayland-automation"

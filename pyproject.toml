@@ -7,5 +7,6 @@ requires-python = ">=3.13"
 dependencies = [
     "pillow>=11.3.0",
     "pyscreenshot>=3.1",
+    "python-ydotool>=1.0.4.post1",
     "wayland-automation>=0.2.1",
 ]
