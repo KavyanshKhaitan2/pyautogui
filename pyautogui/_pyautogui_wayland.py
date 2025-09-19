@@ -1,15 +1,6 @@
 """
 To Implement:
-[x] _position: Return xy coordinates of mouse
-[x] _size: Return screen size
-[x] _vscroll: Vertical mouse scroll
-[x] _hscroll: Horizontal mouse scroll
-[x] _scroll: Mouse scroll
-[x] _click: Mouse click
-[ ] _mouse_is_swapped: Check if LR mouse buttons are swapped.
-[x] _moveTo: Moves the mouse cursor to a point on the screen
-[x] _mouseDown: Mouse Down
-[x] _mouseUp: Mouse Up (if mouse is down)
+(LAZY IMPLEMENT) [ ] _mouse_is_swapped: Check if LR mouse buttons are swapped.
 [ ] _keyDown: Key Down
 [ ] _keyUp: Key Up (if key is down)
 """
