@@ -24,7 +24,8 @@ import platform
 import re
 import functools
 from contextlib import contextmanager
-
+from _typeshed import StrOrBytesPath
+import PIL
 
 class PyAutoGUIException(Exception):
     """
@@ -178,7 +179,15 @@ def raisePyAutoGUIImageNotFoundException(wrappedFunction):
 
 try:
     import pyscreeze
-    from pyscreeze import center, pixel, pixelMatchesColor, screenshot
+    from pyscreeze import center, pixel, pixelMatchesColor
+    
+    import pyscreenshot
+    def screenshot(imageFilename: StrOrBytesPath | None = None, region: tuple[int, int, int, int] | None = None) -> PIL.Image:
+        x, y, w, h = region
+        bbox = (x, y, x+w, y+h)
+        im = pyscreenshot.grab(bbox=bbox)
+        im.save(imageFilename)
+        return im
 
     # Change the locate*() functions so that they raise PyAutoGUI's ImageNotFoundException instead.
     @raisePyAutoGUIImageNotFoundException
@@ -228,6 +237,7 @@ except ImportError:
         raise PyAutoGUIException(
             "PyAutoGUI was unable to import pyscreeze. (This is likely because you're running a version of Python that Pillow (which pyscreeze depends on) doesn't support currently.) Please install this module to enable the function you tried to call."
         )
+
 
     center = _couldNotImportPyScreeze
     #grab = _couldNotImportPyScreeze  # grab() was removed, use screenshot() instead
