@@ -78,7 +78,7 @@ def _vscroll(clicks, x=None, y=None):
     if x is not None and y is not None:
         _moveTo(x, y)
 
-    subprocess.run(["ydotool", "scroll", "0", clicks])
+    subprocess.run(["ydotool", "mousemove", "-w", "-x", "0", "-y", str(clicks)])
 
 
 def _hscroll(clicks, x=None, y=None):
@@ -89,7 +89,7 @@ def _hscroll(clicks, x=None, y=None):
     if x is not None and y is not None:
         _moveTo(x, y)
 
-    subprocess.run(["ydotool", "scroll", clicks, "0"])
+    subprocess.run(["ydotool", "mousemove", "-w", "-x", str(clicks), "-y", "0"])
 
 
 def _scroll(clicks, x=None, y=None):
@@ -180,7 +180,7 @@ keyboardMapping.update(
         ",": pydotool.KEY_COMMA,
         "-": pydotool.KEY_MINUS,
         ".": pydotool.KEY_DOT,
-        "/": pydotool.KEY_DOT,
+        "/": pydotool.KEY_SLASH,
         "0": pydotool.KEY_0,
         "1": pydotool.KEY_1,
         "2": pydotool.KEY_2,
