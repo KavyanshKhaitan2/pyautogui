@@ -17,6 +17,7 @@ from PIL import Image
 import time
 
 SCALING = 1
+SIZE = None
 
 def _position():
     """Returns the current xy coordinates of the mouse cursor as a two-integer
@@ -32,8 +33,13 @@ def _position():
     return x, y
 
 def _size():
+    # We will cache the screen size as this process is not the fastest.
+    global SIZE
+    if SIZE is not None:
+        return SIZE
     im: Image.Image = pyscreenshot.grab()
-    return im.size
+    SIZE = im.size
+    return SIZE
 
 
 def _moveTo(x, y):
