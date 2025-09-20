@@ -26,9 +26,10 @@ def _position():
         (x, y) tuple of the current xy coordinates of the mouse cursor.
     """
     gen = wayland_automation.mouse_position_generator()
-    pos = next(gen)
+    x, y = next(gen)
+    x, y = x*SCALING, y*SCALING
     gen.close()
-    return pos
+    return x, y
 
 def _size():
     im: Image.Image = pyscreenshot.grab()
@@ -36,9 +37,30 @@ def _size():
 
 
 def _moveTo(x, y):
-    new_x = int(x/(2*SCALING))
-    new_y = int(y/(2*SCALING))
-    subprocess.run(["ydotool", "mousemove", "-a", "-x", str(new_x), "-y", str(new_y)])
+    ox, oy = x, y
+    orig_pos = x, y
+    wx, wy = x, y
+    tries_left = 20
+    while _position() != orig_pos:
+        new_x = ((wx)/(2*SCALING))
+        new_y = ((wy)/(2*SCALING))
+        subprocess.run(["ydotool", "mousemove", "-a", "-x", str(new_x), "-y", str(new_y)])
+        if tries_left == 0:
+            return
+        
+        if _position() != orig_pos:
+            tries_left -= 1
+            nx, ny = _position()
+            if ox > x:
+                wx += 1
+            if ox < x:
+                wx -= 1
+            if oy > y:
+                wy += 1
+            if oy < y:
+                oy -= 1
+                
+            
 
 if "Getting Correct Scaling":
     prev_x, prev_y = _position()
@@ -243,6 +265,7 @@ keyboardMapping.update(
         "altleft": pydotool.KEY_LEFTMETA,
         "altright": pydotool.KEY_RIGHTMETA,
         "backspace": pydotool.KEY_BACKSPACE,
+        "\b": pydotool.KEY_BACKSPACE,
         "capslock": pydotool.KEY_CAPSLOCK,
         "ctrl": pydotool.KEY_LEFTCTRL,
         "ctrlleft": pydotool.KEY_LEFTCTRL,
@@ -327,13 +350,12 @@ keyboardMapping.update(
     }
 )
 
-def __sendkey(keys:tuple[int] | list[int], next_delay:int | float | None = None):
+def __sendkey(keys:list[tuple[int, int]], next_delay:int | float | None = None):
     seq = [] if next_delay is None else [f"--key-delay={next_delay}"]
-    for key in keys:
-        mod = key % 2
-        key = key - mod
+    for key, mod in keys:
         seq.append(f'{key}:{mod}')
-    subprocess.run(["ydotool", "key", *seq])
+    e = subprocess.run(["ydotool", "key", *seq])
+    e.check_returncode()
     
 
 def _keyDown(key):
@@ -349,7 +371,7 @@ def _keyDown(key):
     """
     
     if type(key) is int:
-        __sendkey([key | pydotool.DOWN])
+        __sendkey([(key, pydotool.DOWN)])
         return
     
     if key not in keyboardMapping or keyboardMapping[key] is None:
@@ -357,14 +379,10 @@ def _keyDown(key):
 
     needsShift = pyautogui.isShiftCharacter(key)
     if needsShift:
-        __sendkey([pydotool.KEY_LEFTSHIFT | pydotool.DOWN])
-    
-    time.sleep(0.1)
-    __sendkey([keyboardMapping[key] | pydotool.DOWN])
-    time.sleep(0.1)
+        __sendkey([(pydotool.KEY_LEFTSHIFT, pydotool.DOWN), (keyboardMapping[key], pydotool.DOWN), (pydotool.KEY_LEFTSHIFT, pydotool.UP)])
+    else:
+        __sendkey([(keyboardMapping[key], pydotool.DOWN)])
 
-    if needsShift:
-        __sendkey([pydotool.KEY_LEFTSHIFT | pydotool.UP])
 
 def _keyUp(key):
     """Performs a keyboard key release (without the press down beforehand).
@@ -384,4 +402,4 @@ def _keyUp(key):
     else:
         keycode = keyboardMapping[key]
 
-    __sendkey([keycode, pydotool.UP])
+    __sendkey([(keycode, pydotool.UP)])
