@@ -117,7 +117,7 @@ requires-dist = [
     { name = "pillow", specifier = ">=11.3.0" },
     { name = "pyscreenshot", specifier = ">=3.1" },
     { name = "pyscreeze", specifier = ">=1.0.1" },
-    { name = "python-ydotool", specifier = ">=1.0.4.post1" },
+    { name = "python-ydotool", specifier = ">=1.1.0" },
     { name = "pytweening", specifier = ">=1.2.0" },
     { name = "wayland-automation", specifier = ">=0.2.1" },
 ]
@@ -145,9 +145,9 @@ sdist = { url = "https://files.pythonhosted.org/packages/ee/f0/cb456ac4f1a73723d
 
 [[package]]
 name = "python-ydotool"
-version = "1.0.4.post1"
+version = "1.1.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/78/49/929d9c409ce378a87928a9b1ae62a2273f33588a5b233274a03e629b9ab1/python_ydotool-1.0.4.post1.tar.gz", hash = "sha256:69815d603624fbc81f0a49eec9ae891368ce62031433596161250201de2d9e49", size = 39844, upload-time = "2024-05-26T17:34:54.249Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/f0/f4/b5240a9477f8dd33dbfb947f52e6b119c634a830b2c23b0266058e55f60c/python_ydotool-1.1.0.tar.gz", hash = "sha256:d3f96c91cf8da2a5f73a1f6ebd45ae318795c01b4dcdb36620c3492e03d55090", size = 40531, upload-time = "2025-09-19T17:11:01.854Z" }
 
 [[package]]
 name = "pytweening"

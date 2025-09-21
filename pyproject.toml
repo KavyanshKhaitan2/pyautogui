@@ -8,7 +8,7 @@ dependencies = [
     "pillow>=11.3.0",
     "pyscreenshot>=3.1",
     "pyscreeze>=1.0.1",
-    "python-ydotool>=1.0.4.post1",
+    "python-ydotool>=1.1.0",
     "pytweening>=1.2.0",
     "wayland-automation>=0.2.1",
 ]
