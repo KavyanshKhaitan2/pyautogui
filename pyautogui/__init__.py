@@ -24,7 +24,7 @@ import re
 import functools
 from contextlib import contextmanager
 import PIL
-
+import time
 
 class PyAutoGUIException(Exception):
     """
@@ -1702,11 +1702,21 @@ def typewrite(message, interval=0.0, logScreenshot=None, _pause=True):
     interval = float(interval)  # TODO - this should be taken out.
 
     _logScreenshot(logScreenshot, "write", message, folder=".")
-    for c in message:
+    adjusted_interval = interval
+    for i, c in enumerate(message):
         if len(c) > 1:
             c = c.lower()
+        if interval != 0.0 and i == 0:
+            s = time.perf_counter()
+        
         press(c, _pause=False)
-        time.sleep(interval)
+        
+        if interval != 0.0 and i == 0:
+            e = time.perf_counter()
+            adjust = e - s
+            adjusted_interval = interval - adjust + 0.01
+        
+        time.sleep(adjusted_interval)
         failSafeCheck()
 
 
