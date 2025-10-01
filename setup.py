@@ -35,6 +35,7 @@ setup(
                       'wayland-automation;platform_system=="Linux" and python_version<"3.0"',
                       'pymsgbox',
                       'pytweening>=1.0.4',
+                      'pyscreenshot',
                       'pyscreeze>=0.1.21',
                       'pygetwindow>=0.0.5',
                       'mouseinfo'],
