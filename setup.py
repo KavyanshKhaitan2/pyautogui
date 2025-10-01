@@ -31,6 +31,8 @@ setup(
                       'pyobjc-framework-quartz;platform_system=="Darwin"',
                       'python3-Xlib;platform_system=="Linux" and python_version>="3.0"',
                       'python-xlib;platform_system=="Linux" and python_version<"3.0"',
+                      'python-ydotool;platform_system=="Linux" and python_version<"3.0"',
+                      'wayland-automation;platform_system=="Linux" and python_version<"3.0"',
                       'pymsgbox',
                       'pytweening>=1.0.4',
                       'pyscreeze>=0.1.21',
