@@ -24,7 +24,7 @@ import re
 import functools
 from contextlib import contextmanager
 import PIL
-import time
+from Xlib.error import XauthError
 
 class PyAutoGUIException(Exception):
     """
@@ -266,7 +266,7 @@ try:
         """
         mouseinfo.MouseInfoWindow()
 
-except ImportError:
+except (ImportError, XauthError):
 
     def mouseInfo():
         """
