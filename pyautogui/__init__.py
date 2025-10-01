@@ -1703,15 +1703,15 @@ def typewrite(message, interval=0.0, logScreenshot=None, _pause=True):
 
     _logScreenshot(logScreenshot, "write", message, folder=".")
     adjusted_interval = interval
-    for i, c in enumerate(message):
+    for c in message:
         if len(c) > 1:
             c = c.lower()
-        if interval != 0.0 and i == 0:
+        if interval != 0.0:
             s = time.perf_counter()
         
         press(c, _pause=False)
         
-        if interval != 0.0 and i == 0:
+        if interval != 0.0:
             e = time.perf_counter()
             adjust = e - s
             adjusted_interval = interval - adjust
