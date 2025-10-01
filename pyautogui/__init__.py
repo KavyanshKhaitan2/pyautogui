@@ -1714,7 +1714,7 @@ def typewrite(message, interval=0.0, logScreenshot=None, _pause=True):
         if interval != 0.0 and i == 0:
             e = time.perf_counter()
             adjust = e - s
-            adjusted_interval = interval - adjust + 0.01
+            adjusted_interval = interval - adjust
         
         time.sleep(adjusted_interval)
         failSafeCheck()
