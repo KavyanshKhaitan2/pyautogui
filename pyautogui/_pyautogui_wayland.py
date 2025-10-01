@@ -42,12 +42,12 @@ def _size():
     return SIZE
 
 
-def _moveTo(x, y):
+def _moveTo(x, y, tries_left=1):
     ox, oy = x, y
     orig_pos = x, y
     wx, wy = x, y
-    tries_left = 20
     while _position() != orig_pos:
+        tries_left -= 1
         new_x = ((wx)/(2*SCALING))
         new_y = ((wy)/(2*SCALING))
         subprocess.run(["ydotool", "mousemove", "-a", "-x", str(new_x), "-y", str(new_y)])
@@ -55,7 +55,6 @@ def _moveTo(x, y):
             return
         
         if _position() != orig_pos:
-            tries_left -= 1
             nx, ny = _position()
             if ox > x:
                 wx += 1
