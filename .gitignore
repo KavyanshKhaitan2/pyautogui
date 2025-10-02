@@ -15,8 +15,4 @@ build/
 *.egg-info/
 
 Pipfile.lock
-
-test.py
 uv.lock
-pyproject.toml
-.python-version
