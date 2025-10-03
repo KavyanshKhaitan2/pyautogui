@@ -556,19 +556,24 @@ def isShiftCharacter(character):
 
 
 # The platformModule is where we reference the platform-specific functions.
+system_platform = None
 if sys.platform.startswith("java"):
     # from . import _pyautogui_java as platformModule
     raise NotImplementedError("Jython is not yet supported by PyAutoGUI.")
 elif sys.platform == "darwin":
+    system_platform = 'darwin'
     from . import _pyautogui_osx as platformModule
 elif sys.platform == "win32":
+    system_platform = 'win32'
     from . import _pyautogui_win as platformModule
 elif platform.system() == "Linux":
     session_type = os.getenv('XDG_SESSION_TYPE')
     if session_type == 'wayland':
+        system_platform = 'wayland'
         # Assuming session is in Wayland.
         from . import _pyautogui_wayland as platformModule
     elif session_type == 'x11':
+        system_platform = 'x11'
         # Assuming session is in X11.
         from . import _pyautogui_x11 as platformModule
     else:
@@ -593,7 +598,7 @@ MINIMUM_SLEEP = 0.05
 # The number of seconds to pause after EVERY public function call. Useful for debugging:
 PAUSE = 0.1  # Tenth-second pause by default.
 
-# Interface need some catch up time on darwin (macOS) systems. Possible values probably differ based on your system performance.
+# Interface need some catch up time on a few systems. Possible values probably differ based on your system performance.
 # This value affects mouse moveTo, dragTo and key event duration.
 # TODO: Find a dynamic way to let the system catch up instead of blocking with a magic number.
 DARWIN_CATCH_UP_TIME = 0.01
@@ -1725,7 +1730,7 @@ def typewrite(message, interval=0.0, logScreenshot=None, _pause=True):
             adjust = e - s
             adjusted_interval = interval - adjust
         
-        time.sleep(adjusted_interval)
+        time.sleep(max(adjusted_interval, 0))
         failSafeCheck()
 
 
