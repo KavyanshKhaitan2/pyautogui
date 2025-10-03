@@ -24,7 +24,6 @@ import re
 import functools
 from contextlib import contextmanager
 import PIL
-from Xlib.error import XauthError
 
 class PyAutoGUIException(Exception):
     """
@@ -266,7 +265,7 @@ try:
         """
         mouseinfo.MouseInfoWindow()
 
-except (ImportError, XauthError):
+except ImportError:
 
     def mouseInfo():
         """
@@ -275,6 +274,16 @@ except (ImportError, XauthError):
         """
         raise PyAutoGUIException(
             "PyAutoGUI was unable to import mouseinfo. Please install this module to enable the function you tried to call."
+        )
+
+except Exception:
+    def mouseInfo():
+        """
+        This function raises PyAutoGUIException. It's used for the MouseInfo function names if the MouseInfo module
+        failed.
+        """
+        raise PyAutoGUIException(
+            "PyAutoGUI was unable to use mouseinfo. This usually means that you are using a platform that does not support mouseinfo (eg. Wayland)."
         )
 
 
