@@ -42,37 +42,23 @@ def _size():
     return SIZE
 
 
-def _moveTo(x, y, tries_left=1):
-    ox, oy = x, y
-    orig_pos = x, y
-    wx, wy = x, y
-    while _position() != orig_pos:
-        tries_left -= 1
-        new_x = ((wx)/(2*SCALING))
-        new_y = ((wy)/(2*SCALING))
-        subprocess.run(["ydotool", "mousemove", "-a", "-x", str(new_x), "-y", str(new_y)])
-        if tries_left == 0:
-            return
-        
-        if _position() != orig_pos:
-            nx, ny = _position()
-            if ox > x:
-                wx += 1
-            if ox < x:
-                wx -= 1
-            if oy > y:
-                wy += 1
-            if oy < y:
-                oy -= 1
-                
+def _moveTo(x, y):
+    new_x = ((x)/(SCALING))
+    new_y = ((y)/(SCALING))
+    subprocess.run(["ydotool", "mousemove", "-a", "-x", str(new_x), "-y", str(new_y)])
+
             
 
-if "Getting Correct Scaling":
-    prev_x, prev_y = _position()
+if "Getting constant values":
+    init_x, init_y = _position()
     w, h = _size()
+    
     _moveTo(w, h)
     x, y = _position()
-    _moveTo(prev_x, prev_y)
+    _moveTo(init_x, init_y)
+    new_x, new_y = _position()
+    if init_x != new_x:
+        raise Exception("Please disable mouse acceleration.\nPyAutoGUI does not work properly with acceleration enabled.")
     SCALING = w/x
 
 def _vscroll(clicks, x=None, y=None):
