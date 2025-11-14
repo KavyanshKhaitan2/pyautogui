@@ -58,7 +58,7 @@ if "Getting constant values":
     _moveTo(init_x, init_y)
     new_x, new_y = _position()
     if init_x != new_x:
-        raise Exception("Please disable mouse acceleration.\nPyAutoGUI does not work properly with acceleration enabled.")
+        raise Exception("Please disable mouse acceleration.\nPyAutoGUI does not work properly with acceleration enabled.\nDevice name should be 'ydotool virtual device'")
     SCALING = w/x
 
 def _vscroll(clicks, x=None, y=None):
