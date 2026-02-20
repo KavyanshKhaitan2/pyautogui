@@ -19,6 +19,19 @@ import time
 SCALING = 1
 SIZE = None
 
+ISGNOME = os.getenv("XDG_CURRENT_DESKTOP") == "ubuntu:GNOME"
+if ISGNOME:
+    try:
+        import gnomopo
+    except:
+        print("\n\nyou're running ubuntu gnome!")
+        print("you need gnomopo for mouse position and screen sizing, so do this:\n")
+        print("1) $> pip install gnomopo")
+        print("2) $> gnomopo install")
+        print("3) log in and out to restart your gnome session")
+        print("4) $> gnomopo enable\n")
+        print("then pyautogui should work fine\n\n")
+
 def _position():
     """Returns the current xy coordinates of the mouse cursor as a two-integer
     tuple.
@@ -26,10 +39,13 @@ def _position():
     Returns:
         (x, y) tuple of the current xy coordinates of the mouse cursor.
     """
-    gen = wayland_automation.mouse_position_generator()
-    x, y = next(gen)
+    if ISGNOME:
+        x, y = gnomopo.getpos()
+    else:
+        gen = wayland_automation.mouse_position_generator()
+        x, y = next(gen)
+        gen.close()
     x, y = x*SCALING, y*SCALING
-    gen.close()
     return x, y
 
 def _size():
@@ -37,8 +53,11 @@ def _size():
     global SIZE
     if SIZE is not None:
         return SIZE
-    im: Image.Image = pyscreenshot.grab()
-    SIZE = im.size
+    if ISGNOME:
+        SIZE = gnomopo.getsize()
+    else:
+        im: Image.Image = pyscreenshot.grab()
+        SIZE = im.size
     return SIZE
 
 
