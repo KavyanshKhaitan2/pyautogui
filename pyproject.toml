@@ -3,7 +3,7 @@ name = "pyautogui"
 version = "0.9.54"
 description = "UI Automation Library for Python"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = [
     "pillow>=12.1.0",
     "pyscreenshot>=3.1",
