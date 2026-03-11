@@ -79,8 +79,7 @@ def _moveTo(x, y):
         new_x += _display["x"]
         new_y += _display["y"]
     subprocess.run(["ydotool", "mousemove", "-a", "-x", str(new_x), "-y", str(new_y)])
-
-            
+    time.sleep(pyautogui.WAYLAND_MOVE_TIME)
 
 if "Getting constant values" and not ISGNOME:
     init_x, init_y = _position()
@@ -122,7 +121,9 @@ def _scroll(clicks, x=None, y=None):
 
 def __click(code:int):
     code = hex(code)
+    time.sleep(pyautogui.WAYLAND_CLICK_TIME)
     subprocess.run(["ydotool", "click", code])
+    time.sleep(pyautogui.WAYLAND_CLICK_TIME)
 
 def _click(x, y, button):
     assert button in (
